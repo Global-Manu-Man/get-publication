@@ -20,38 +20,42 @@ exports.business=(req,res)=>{
 
             res.send({data:err})
 
-        }
+        }else if(data.length === 0){
 
-        db.query(image_sql,(err,images)=>{
-    
-            if(err){
-    
-                res.send({data:err})
-    
-            }
+            res.status(404).json({message: "no record record found"})
+        }else{
 
-            const imageUrls = images && images.length > 0 ? images.map((row) => row.image_url) : [];
-
-            db.query(policies_terms_sql,(err,terms)=>{
+            db.query(image_sql,(err,images)=>{
     
                 if(err){
         
-                res.send({data:err})
+                    res.send({data:err})
         
                 }
-                res.status(200).json({
-                    code:200,
-                    data:data,
-                    images:imageUrls,
-                    policies_terms:terms[0]['policies_terms'].toString()
-                })
-
-                
-            })
     
-        })
+                const imageUrls = images && images.length > 0 ? images.map((row) => row.image_url) : [];
+    
+                db.query(policies_terms_sql,(err,terms)=>{
+        
+                    if(err){
             
-          
+                    res.send({data:err})
+            
+                    }
+                    res.status(200).json({
+                        code:200,
+                        data:data,
+                        images:imageUrls,
+                        policies_terms:terms[0]['policies_terms'].toString()
+                    })
+    
+                    
+                })
+        
+            })
+
+        }
+
        
     })
 
