@@ -23,6 +23,7 @@ exports.business=(req,res)=>{
         }else if(data.length === 0){
 
             res.status(404).json({message: "no record record found"})
+            
         }else{
 
             db.query(image_sql,(err,images)=>{
